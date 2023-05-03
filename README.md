@@ -15,7 +15,7 @@ pip install selenium watchdog undetected-chromedriver
 ## Usage
 For first time use, run the script in terminal: python3 AutoScreenshot.py  
 A selenium instance of chrome will open, and then you will be prompted to enter the directory of your screenshot. 
-After your enter directory you will see "started event handler" and you are good to go and ready for general use.  
+After your enter your directory, you will see "started event handler" and you are good to go and ready for general use.  
 
 General Use:
 If your directory is already entered the first time, then you will just see selenium's instance of Google Chrome open and the same "started event handler" message. 
