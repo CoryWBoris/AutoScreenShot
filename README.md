@@ -1,4 +1,4 @@
-# AutoScreenShot by Cory Boris
+# AutoScreenShot.py by Cory Boris
 A simple Python script for Mac OSX for uploading images to Imgur using undetected-chromedriver which uses Selenium via Chrome.
 
 ## Requirements
