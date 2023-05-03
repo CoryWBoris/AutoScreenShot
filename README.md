@@ -6,6 +6,7 @@ Python 3
 Selenium  
 Undetected Chromedriver  
 Watchdog  
+Lates Version of Google Chrome 
 
 ## Installation
 Clone this repository.
