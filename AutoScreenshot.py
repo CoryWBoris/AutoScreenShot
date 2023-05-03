@@ -3,6 +3,7 @@
 
 import datetime
 import os
+import pickle
 import random
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -94,14 +95,40 @@ def go_to_imgur_upload(file_string):
     actions.move_to_element(img_container).perform()
     copy_button.click()
 
-def get_main_dir():
-    main_dir = input("please enter the directory you would like to watch: ")
-    # todo: get main_dir from user input
-    return main_dir
+def get_directory():
+    # Check if pickle file exists
+    if os.path.exists("screenshot.pickle"):
+        # Load pickle file
+        with open("screenshot.pickle", "rb") as f:
+            screenshot_data = pickle.load(f)
+        # Check if initialized flag is True
+        if screenshot_data.get("Initialized", True):
+            screenshot_directory = screenshot_data["screenshot_directory"] 
+            if os.path.isdir(screenshot_directory):
+                return screenshot_directory  
+            else:
+                print("Corrupted screenshot directory. Delete pickle file and restart program.") 
+                exit()
+
+    # If pickle file doesn't exist or initialized flag is False, prompt user for directory
+    while True:
+        os.system('clear')  
+        screenshot_directory = input("Please enter screenshot directory: ")
+        if os.path.isdir(screenshot_directory):
+            break
+        else:
+            os.system('clear')
+            print("Sorry, that directory is not valid, please try again.")
+            time.sleep(1)
+            os.system('clear')
+    # Save screenshot directory to pickle file
+    with open("screenshot.pickle", "wb") as f:
+        pickle.dump({"Initialized": True, "screenshot_directory": screenshot_directory}, f)
+    return screenshot_directory
 
 def main():
     # Get the main directory to watch as a command line argument
-    main_dir = get_main_dir()
+    main_dir = get_directory()
     # Create a file system event handler
     event_handler = MyHandler(main_dir)
     print("started event handler")
