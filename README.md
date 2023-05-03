@@ -9,8 +9,8 @@ Watchdog
 Lates Version of Google Chrome 
 
 ## Installation
-Clone this repository.
-Install the required packages: 
+Clone or download this repository.
+Then install the required packages: 
 pip install selenium watchdog undetected-chromedriver
 
 ## Usage
