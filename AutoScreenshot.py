@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# AutoScreenshot.py
+
 import datetime
 import os
 import random
@@ -58,8 +61,6 @@ class MyHandler(FileSystemEventHandler):
 
 def fix_dot_filename(filepath):
     directory, filename = os.path.split(filepath)
-    print("reached fix dot filename")
-    print(filename)
     if filename.startswith('.'):
         fixed_filename = filename[1:]
         fixed_filepath = os.path.join(directory, fixed_filename)
@@ -68,8 +69,8 @@ def fix_dot_filename(filepath):
     return filepath
 
 def go_to_imgur_upload(file_string):
-    print("uploading image")
-    print(file_string)
+    print("uploading image:")
+    print(f'full path: {file_string}')
     driver.get('https://imgur.com/upload')
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
