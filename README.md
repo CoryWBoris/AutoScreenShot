@@ -18,6 +18,6 @@ When a new image is added to the directory, the script will automatically upload
 The direct link to the uploaded image will be copied to your clipboard.
 
 ### Note
-I haven't checked for exceptions yet, but so far I haven't experienced anything out of the ordinary. Of course the elements on imgur could change overtime so I will make sure to update the css selectors as needed.
+I haven't checked for major exceptions yet, but so far I haven't experienced anything out of the ordinary. Of course the elements on imgur could change overtime so I will make sure to update the css selectors as needed.
 
 Happy Auto Screenshotting!
