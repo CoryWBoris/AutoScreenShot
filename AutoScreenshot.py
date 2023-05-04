@@ -17,9 +17,12 @@ import time
 from undetected_chromedriver import Chrome, ChromeOptions
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
+import certifi
+
+os.environ['SSL_CERT_FILE'] = certifi.where()
 
 #gets rid of ssl error
-ssl._create_default_https_context = ssl._create_unverified_context
+# ssl._create_default_https_context = ssl._create_unverified_context
 
 # Set up Chrome options
 options = ChromeOptions()
