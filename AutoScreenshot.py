@@ -66,7 +66,6 @@ def fix_dot_filename(filepath):
     if filename.startswith('.'):
         fixed_filename = filename[1:]
         fixed_filepath = os.path.join(directory, fixed_filename)
-        os.rename(filepath, fixed_filepath)
         return fixed_filepath
     return filepath
 
