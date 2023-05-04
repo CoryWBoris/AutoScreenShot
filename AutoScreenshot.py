@@ -71,7 +71,6 @@ def fix_dot_filename(filepath):
 
 def go_to_imgur_upload(file_string):
     print("uploading image:")
-    print(f'full path: {file_string}')
 
     # On apple, screenshots are autoamtically named with the timestamp included. 
     # But when using watchdog, the filename has a slightly different timestamp in its name, even though it is referring to the same file
@@ -87,6 +86,7 @@ def go_to_imgur_upload(file_string):
     # Get the filename of the most recently created file
     most_recent_file = files[-1]
     file_path = directory + "/" + most_recent_file
+    print(f'full path: {file_path}')
     driver.get('https://imgur.com/upload')
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
