@@ -77,7 +77,7 @@ def go_to_imgur_upload(file_string):
     # versus the actual filename's time stamp which is in the string of the filename itself.
     # if the file's name is not exact then i can't press enter for the file dialogue window and the program will crash
     # but this code guarantees that you upload the most recent screenshot, which is the whole point.
-    file_string = file_string[:-39]
+    file_string = file_string[:-29]
     driver.get('https://imgur.com/upload')
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
@@ -96,9 +96,9 @@ def go_to_imgur_upload(file_string):
     
     toast_element = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "Toast-message--check")))
     actions = ActionChains(driver)
-    copy_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.desktop-app.App > div > div.Upload-container > div.UploadPost > div > div.PostContent.UploadPost-file > div.PostContent-imageWrapper > div.PostContentMenu > button")))
     img_container = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.desktop-app.App > div > div.Upload-container > div.UploadPost > div > div:nth-child(2) > div.PostContent-imageWrapper > div.PostContent-imageWrapper-rounded > img")))
     actions.move_to_element(img_container).perform()
+    copy_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.desktop-app.App > div > div.Upload-container > div.UploadPost > div > div.PostContent.UploadPost-file > div.PostContent-imageWrapper > div.PostContentMenu > button")))
     copy_button.click()
 
 def get_directory():
