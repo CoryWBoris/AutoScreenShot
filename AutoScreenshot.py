@@ -19,10 +19,8 @@ from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 import certifi
 
+# verify ssl certificate
 os.environ['SSL_CERT_FILE'] = certifi.where()
-
-#gets rid of ssl error
-# ssl._create_default_https_context = ssl._create_unverified_context
 
 # Set up Chrome options
 options = ChromeOptions()
@@ -75,6 +73,12 @@ def fix_dot_filename(filepath):
 def go_to_imgur_upload(file_string):
     print("uploading image:")
     print(f'full path: {file_string}')
+
+    # The following is a hacky way to get the most recent file in screenshots. This is due to imprecision with the time stamp gathered by watch dog
+    # versus the actual filename's time stamp which is in the string of the filename itself.
+    # if the file's name is not exact then i can't press enter for the file dialogue window and the program will crash
+    # but this code guarantees that you upload the most recent screenshot, which is the whole point.
+    file_string = file_string[:-39]
     driver.get('https://imgur.com/upload')
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
