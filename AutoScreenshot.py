@@ -73,11 +73,20 @@ def go_to_imgur_upload(file_string):
     print("uploading image:")
     print(f'full path: {file_string}')
 
-    # The following is a hacky way to get the most recent file in screenshots. This is due to imprecision with the time stamp gathered by watch dog
-    # versus the actual filename's time stamp which is in the string of the filename itself.
+    # On apple, screenshots are autoamtically named with the timestamp included. 
+    # But when using watchdog, the filename has a slightly different timestamp in its name, even though it is referring to the same file
+    # The following is how I get the most recent screenshot in spite of the name of watchdog's filename not having the same time stamp as the file's name itself
     # if the file's name is not exact then i can't press enter for the file dialogue window and the program will crash
     # but this code guarantees that you upload the most recent screenshot, which is the whole point.
-    file_string = file_string[:-29]
+    directory = os.path.dirname(file_string)
+    files = os.listdir(directory)
+
+    # Sort files in directory by creation time
+    files.sort(key=lambda x: os.path.getctime(os.path.join(directory, x)))
+
+    # Get the filename of the most recently created file
+    most_recent_file = files[-1]
+    file_path = directory + "/" + most_recent_file
     driver.get('https://imgur.com/upload')
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
@@ -88,7 +97,7 @@ def go_to_imgur_upload(file_string):
         "-e", 'tell application "System Events"',
         "-e", 'keystroke "g" using {shift down, command down}',
         "-e", 'delay 1.5',
-        "-e", f'keystroke "{file_string}" & return',
+        "-e", f'keystroke "{file_path}" & return',
         "-e", 'delay 1.5',
         "-e", 'keystroke return',
         "-e", 'end tell'
