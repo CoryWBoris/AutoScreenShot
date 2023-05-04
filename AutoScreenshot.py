@@ -111,9 +111,9 @@ def get_directory():
                 return screenshot_directory  
             else:
                 print("Corrupted screenshot directory. Delete pickle file and restart program.") 
-                exit()
+                exit(1)
 
-    # If pickle file doesn't exist or initialized flag is False, prompt user for directory
+    # If pickle file doesn't exist, prompt user for directory
     while True:
         os.system('clear')  
         screenshot_directory = input("Please enter screenshot directory: ")
