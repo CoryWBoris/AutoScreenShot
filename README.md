@@ -2,16 +2,17 @@
 A simple Python script for Mac OSX for uploading images to Imgur using undetected-chromedriver which uses Selenium via Chrome.
 
 ## Requirements
-Python 3  
-Selenium  
-Undetected Chromedriver  
-Watchdog  
-Lates Version of Google Chrome 
+Python 3 (https://www.python.org/downloads/) 
+selenium  
+undetected-chromedriver  
+watchdog  
+certifi
+Latest Version of Google Chrome
 
 ## Installation
 Clone or download this repository.
 Then install the required packages: 
-pip install selenium watchdog undetected-chromedriver
+pip install selenium watchdog undetected-chromedriver certifi
 
 ## Usage
 For first time use, run the script in terminal: python3 AutoScreenshot.py  
