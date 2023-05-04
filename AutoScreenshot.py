@@ -5,6 +5,7 @@ import datetime
 import os
 import pickle
 import random
+import re
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,6 +34,9 @@ prefs = {
     'profile.password_manager_enabled': False
 }
 options.add_experimental_option('prefs', prefs)
+# ublock_path = '/Users/Cory/Documents/ChromeExtScraping/extension_1_49_2_0.crx'
+# options.add_extension(ublock_path)
+# options.add_argument('--enable-logging')
 driver = Chrome(options=options)
 
 class MyHandler(FileSystemEventHandler):
@@ -80,14 +84,27 @@ def go_to_imgur_upload(file_string):
     directory = os.path.dirname(file_string)
     files = os.listdir(directory)
 
+    # this blasted dot in the filename is causing me so much trouble
+    for i, file in enumerate(files):
+        if file[0] == '.':
+            files[i] = file[1:]
+    files = [file for file in files if not file.endswith('DS_Store')]
+    files = [file for file in files if extract_timestamp(file) is not None]
+    # print(files)
     # Sort files in directory by creation time
-    files.sort(key=lambda x: os.path.getctime(os.path.join(directory, x)))
+    files.sort(key=extract_timestamp)
 
     # Get the filename of the most recently created file
     most_recent_file = files[-1]
     file_path = directory + "/" + most_recent_file
+    file_path = fix_dot_filename(file_path)
     print(f'full path: {file_path}')
     driver.get('https://imgur.com/upload')
+
+    # ideally I will block ads with uBlock origin, but for now I will just close the ad manually
+    # ad_close_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#root > div > div.desktop-app.App > div > div.UploadCover > div.Ad-SCTU > div.SctuCloseButton > span > svg > path')))
+    # driver.execute_script("arguments[0].click();", ad_close_button)
+    
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
     time.sleep(.3)
@@ -140,6 +157,14 @@ def get_directory():
     with open("screenshot.pickle", "wb") as f:
         pickle.dump({"Initialized": True, "screenshot_directory": screenshot_directory}, f)
     return screenshot_directory
+
+def extract_timestamp(filename):
+    # Regular expression pattern to match the timestamp
+    pattern = r'\d{4}-\d{2}-\d{2} at \d{1,2}\.\d{2}\.\d{2} (AM|PM)'
+    match = re.search(pattern, filename)
+    if match:
+        return match.group(0)
+    return None
 
 def main():
     # Get the main directory to watch as a command line argument
