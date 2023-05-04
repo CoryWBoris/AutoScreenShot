@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # AutoScreenshot.py
 
+import certifi
 import datetime
 import os
 import pickle
@@ -18,7 +19,6 @@ import time
 from undetected_chromedriver import Chrome, ChromeOptions
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
-import certifi
 
 # verify ssl certificate
 os.environ['SSL_CERT_FILE'] = certifi.where()
@@ -34,9 +34,48 @@ prefs = {
     'profile.password_manager_enabled': False
 }
 options.add_experimental_option('prefs', prefs)
-# ublock_path = '/Users/Cory/Documents/ChromeExtScraping/extension_1_49_2_0.crx'
-# options.add_extension(ublock_path)
-# options.add_argument('--enable-logging')
+
+# ___________________________________________________________________________________________________________________________________________________________
+# This is the code which allows the user to input the directory for their adBlock plugin. You can use any ad blocker though, but uBlock is really really good.
+# Check if pickle file exists
+if os.path.exists("directories.pickle"):
+    # Load pickle file
+    with open("directories.pickle", "rb") as f:
+        pickle_data = pickle.load(f)
+    # Check if initialized flag is True
+    if pickle_data.get("Initialized adBlock Directory", False):
+        adBlock_directory = pickle_data["adBlock_directory"]
+        if os.path.isdir(adBlock_directory):
+            pass
+        else:
+            print("Not valid adBlock directory. Delete pickle file and restart program.") 
+            exit(1)
+    else:
+        print("adBlock Directory not properly initialized. Delete pickle file and restart program.") 
+        exit(1)
+
+
+else:
+    # If pickle file doesn't exist, prompt user for directory
+    while True:
+        os.system('clear')  
+        adBlock_directory = input("Please enter adBlock add-on directory: ")
+        if os.path.isdir(adBlock_directory):
+            break
+        else:
+            os.system('clear')
+            print("Sorry, that directory is not valid, please try again.")
+            time.sleep(2)
+            os.system('clear')
+    # Save screenshot directory to pickle file
+    with open("directories.pickle", "wb") as f:
+        pickle.dump({"Initialized adBlock Directory": True, "adBlock_directory": adBlock_directory}, f)
+
+# ____________________________________________________________________________________________________________________________________
+options.add_argument(f'--load-extension={adBlock_directory}')
+
+
+
 driver = Chrome(options=options)
 
 class MyHandler(FileSystemEventHandler):
@@ -96,18 +135,19 @@ def go_to_imgur_upload(file_string):
 
     # Get the filename of the most recently created file
     most_recent_file = files[-1]
-    file_path = directory + "/" + most_recent_file
-    file_path = fix_dot_filename(file_path)
-    print(f'full path: {file_path}')
-    driver.get('https://imgur.com/upload')
 
-    # ideally I will block ads with uBlock origin, but for now I will just close the ad manually
-    # ad_close_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#root > div > div.desktop-app.App > div > div.UploadCover > div.Ad-SCTU > div.SctuCloseButton > span > svg > path')))
-    # driver.execute_script("arguments[0].click();", ad_close_button)
+
+    file_path = directory + "/" + most_recent_file
+    # this is possibly redundant but believe it or not, I'm traumatized by the inundation of dots I have been experiencing while making this script
+    file_path = fix_dot_filename(file_path)
+    print(f'full path of screenshot: {file_path}')
+    driver.get('https://imgur.com/upload')
     
     upload_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.AppDialogs > div > div > div > div > div.PopUpContaner > div.PopUpActions > label")))
     upload_button.click()
     time.sleep(.3)
+
+    # I couldn't do this with javascript, and I didn't absolutely need to, but it would be cool to do that in order to make the script more compatible
     process = subprocess.run([
         "osascript",
         "-e", 'tell application "Google Chrome" to activate',
@@ -129,18 +169,18 @@ def go_to_imgur_upload(file_string):
 
 def get_directory():
     # Check if pickle file exists
-    if os.path.exists("screenshot.pickle"):
+    if os.path.exists("directories.pickle"):
         # Load pickle file
-        with open("screenshot.pickle", "rb") as f:
-            screenshot_data = pickle.load(f)
-        # Check if initialized flag is True
-        if screenshot_data.get("Initialized", True):
-            screenshot_directory = screenshot_data["screenshot_directory"] 
-            if os.path.isdir(screenshot_directory):
-                return screenshot_directory  
-            else:
-                print("Corrupted screenshot directory. Delete pickle file and restart program.") 
-                exit(1)
+        with open("directories.pickle", "rb") as f:
+            pickle_data = pickle.load(f)
+            # Check if initialized flag is True
+            if pickle_data.get("Initialized Screenshot Directory", False):
+                screenshot_directory = pickle_data["screenshot_directory"] 
+                if os.path.isdir(screenshot_directory):
+                    return screenshot_directory  
+                else:
+                    print("Corrupted screenshot directory. Delete pickle file and restart program.") 
+                    exit(1)
 
     # If pickle file doesn't exist, prompt user for directory
     while True:
@@ -151,11 +191,16 @@ def get_directory():
         else:
             os.system('clear')
             print("Sorry, that directory is not valid, please try again.")
-            time.sleep(1)
+            time.sleep(2)
             os.system('clear')
     # Save screenshot directory to pickle file
-    with open("screenshot.pickle", "wb") as f:
-        pickle.dump({"Initialized": True, "screenshot_directory": screenshot_directory}, f)
+    pickle_data = {"Initialized Screenshot Directory": True, "screenshot_directory": screenshot_directory}
+    if os.path.exists("directories.pickle"):
+        with open("directories.pickle", "rb") as f:
+            old_pickle_data = pickle.load(f)
+        pickle_data.update(old_pickle_data)
+    with open("directories.pickle", "wb") as f:
+        pickle.dump(pickle_data, f)
     return screenshot_directory
 
 def extract_timestamp(filename):
@@ -163,8 +208,16 @@ def extract_timestamp(filename):
     pattern = r'\d{4}-\d{2}-\d{2} at \d{1,2}\.\d{2}\.\d{2} (AM|PM)'
     match = re.search(pattern, filename)
     if match:
-        return match.group(0)
+        # Extract the date and time from the match
+        timestamp_str = match.group(0)
+        date_str, time_str = timestamp_str.split(' at ')
+
+        # Convert the date and time strings into a datetime object
+        timestamp = time.strptime(timestamp_str, '%Y-%m-%d at %I.%M.%S %p')
+
+        return timestamp
     return None
+
 
 def main():
     # Get the main directory to watch as a command line argument
