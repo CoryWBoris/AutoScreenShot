@@ -31,4 +31,6 @@ If you want to change your default screenshot directory on Mac OSX, follow the i
 
 Unfortunately, this is only available on Mac OSX, but all I would need to make it windows compatible is to change the way the program interacts with the file upload dialogue window. Updates to follow!
 
+IMPORTANT: Also, I automatically ignore the need for SSL certificate verification for the purposes of the script, but this means that the chrome instance using driver should only be used with websites you know are secure. Imgur obviously fits this requirement, and it is the only website used with the unverified SSL certificate
+
 Happy Auto Screenshotting!
