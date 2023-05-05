@@ -40,7 +40,7 @@ print("              /       |    \\")
 print("             /        |     \\")
 print("            /         |      \\")
 print("           /                  \\")
-print("          /                    \\")
+print("          /                    \\\n")
 time.sleep(3.5)
 os.system('clear')
 
