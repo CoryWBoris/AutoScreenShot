@@ -20,24 +20,30 @@ from undetected_chromedriver import Chrome, ChromeOptions
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
-# verify ssl certificate
-os.environ['SSL_CERT_FILE'] = certifi.where()
-
-# Set up Chrome options
-options = ChromeOptions()
-options.add_argument('--disable-blink-features=AutomationControlled')
-options.add_argument('--no-sandbox')
-
-# Disable password saving prompt for the loaded profile
-prefs = {
-    'credentials_enable_service': False,
-    'profile.password_manager_enabled': False
-}
-options.add_experimental_option('prefs', prefs)
 
 # ___________________________________________________________________________________________________________________________________________________________
 # This is the code which allows the user to input the directory for their adBlock plugin. You can use any ad blocker though, but uBlock is really really good.
 # Check if pickle file exists
+
+os.system('clear')
+print("        +========================+")
+print("        |                        |")
+print("        |    AUTO SCREEN SHOT    |")
+print("        |           By           |")
+print("        |       Cory Boris       |")
+print("        |       MIT License      |")
+print("        |          ©2023         |")
+print("        |________________________|")
+print("        |            ( + ) ( - ) |")
+print("        +========================+")
+print("              /       |    \\")
+print("             /        |     \\")
+print("            /         |      \\")
+print("           /                  \\")
+print("          /                    \\")
+time.sleep(3.5)
+os.system('clear')
+
 if os.path.exists("directories.pickle"):
     # Load pickle file
     with open("directories.pickle", "rb") as f:
@@ -72,10 +78,23 @@ else:
         pickle.dump({"Initialized adBlock Directory": True, "adBlock_directory": adBlock_directory}, f)
 
 # ____________________________________________________________________________________________________________________________________
+# ublock_path = '/Users/Cory/Library/Application Support/Google/Chrome/Profile 4/Extensions/cjpalhdlnbpafiamejdnhcphjbkeiagm/1.49.2_0'
+
+# verify ssl certificate
+os.environ['SSL_CERT_FILE'] = certifi.where()
+
+# Set up Chrome options
+options = ChromeOptions()
+options.add_argument('--disable-blink-features=AutomationControlled')
+options.add_argument('--no-sandbox')
+
+# Disable password saving prompt for the loaded profile
+prefs = {
+    'credentials_enable_service': False,
+    'profile.password_manager_enabled': False
+}
+options.add_experimental_option('prefs', prefs)
 options.add_argument(f'--load-extension={adBlock_directory}')
-
-
-
 driver = Chrome(options=options)
 
 class MyHandler(FileSystemEventHandler):
@@ -233,6 +252,7 @@ def main():
     # Start the observer
     observer.start()
 
+
     try:
         while True:
             pass
@@ -241,4 +261,5 @@ def main():
         observer.join()
 
 if __name__ == '__main__':
+
     main()
