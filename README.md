@@ -40,7 +40,7 @@ Lastly, when left in an idle state for too long, there is a disconnect between t
 ### Note
 If you want to change the screenshot directory or the ad blocker directory which the app uses after you already entered it, simply delete the pickle file in the same directory as your script.  
 If you want to change your default screenshot directory on Mac OSX, follow the instructions here: https://www.hellotech.com/guide/for/how-to-change-where-screenshots-are-saved-on-mac  
-If you want to change your default screenshot filetype, in terminal write: defaults write com. apple. screencapture type {enter_type_here}  
+If you want to change your default screenshot filetype, in terminal write: `defaults write com. apple. screencapture type {enter_type_here}`  
 You can choose JPG, TIFF, GIF, PDF and PNG, but only one.
 
 Unfortunately, this script is only available on Mac OSX, but all I would need to make it windows compatible is to change the way the program interacts with the file upload dialogue window in the section which contains the osascript. Updates to follow!
