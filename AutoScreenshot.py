@@ -22,7 +22,7 @@ from watchdog.observers import Observer
 
 
 # ___________________________________________________________________________________________________________________________________________________________
-# I had to fire my very high graphics designer
+# I had to fire my very high quality graphics designer
 os.system('clear')
 print("        +========================+")
 print("        |                        |")
