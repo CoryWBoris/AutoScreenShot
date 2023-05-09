@@ -23,7 +23,7 @@ from watchdog.observers import Observer
 
 # ___________________________________________________________________________________________________________________________________________________________
 # This is the code which allows the user to input the directory for their adBlock plugin. You can use any ad blocker though, but uBlock is really really good.
-# Check if pickle file exists
+
 
 os.system('clear')
 print("        +========================+")
@@ -44,6 +44,7 @@ print("          /                    \\\n")
 time.sleep(3.5)
 os.system('clear')
 
+# Check if pickle file contains string already for adblocker:
 if os.path.exists("directories.pickle"):
     # Load pickle file
     with open("directories.pickle", "rb") as f:
@@ -186,6 +187,13 @@ def go_to_imgur_upload(file_string):
     copy_button = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#root > div > div.desktop-app.App > div > div.Upload-container > div.UploadPost > div > div.PostContent.UploadPost-file > div.PostContent-imageWrapper > div.PostContentMenu > button")))
     copy_button.click()
 
+
+# Long note if you are curious why I have a single global instance of getting a user input and the same method defined globally:
+# While it may seem redundant, and it probably is in terms of efficiency, I couldn't think of a way to overcome the limitation
+# introduced by using a driver globally in the first place, and there is no way around this since my code is triggered by an event 
+# listener which runs into threading issues when I initialize the driver from the event listener itself rather than globally as I have done in my code
+# Ideally, I could have recycled the code from get_directory but I couldn't in this case since I needed to call the driver globally, and I need the directory of the ad blocker 
+# in order to use chrome which all happens before the event listener and obtaining the file directory for that.
 def get_directory():
     # Check if pickle file exists
     if os.path.exists("directories.pickle"):
