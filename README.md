@@ -11,7 +11,7 @@ Latest Version of Google Chrome, at least one adblocker (uBlock Origin is great!
 ## Installation
 Clone or download this repository.
 Then install the required packages in terminal using homebrew:   
-pip install watchdog undetected-chromedriver certifi
+``pip install watchdog undetected-chromedriver certifi 
 
 ## Usage
 ### For First Time Use:
