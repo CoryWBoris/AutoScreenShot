@@ -43,7 +43,7 @@ time.sleep(3.5)
 os.system('clear')
 # ___________________________________________________________________________________________________________________________________________________________
 
-# This global block is the code which allows the user to input the directory for their adBlock plugin. 
+# The proceding global snippet is the code which allows the user to input the directory for their adBlock plugin. 
 # You can use any ad blocker though, but uBlock is really really good.
 
 # Check if pickle file contains string already for adblocker:
