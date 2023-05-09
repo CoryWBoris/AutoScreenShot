@@ -22,9 +22,7 @@ from watchdog.observers import Observer
 
 
 # ___________________________________________________________________________________________________________________________________________________________
-# This is the code which allows the user to input the directory for their adBlock plugin. You can use any ad blocker though, but uBlock is really really good.
-
-
+# I had to fire my very high graphics designer
 os.system('clear')
 print("        +========================+")
 print("        |                        |")
@@ -43,6 +41,10 @@ print("           /                  \\")
 print("          /                    \\\n")
 time.sleep(3.5)
 os.system('clear')
+# ___________________________________________________________________________________________________________________________________________________________
+
+# This global block is the code which allows the user to input the directory for their adBlock plugin. 
+# You can use any ad blocker though, but uBlock is really really good.
 
 # Check if pickle file contains string already for adblocker:
 if os.path.exists("directories.pickle"):
@@ -79,7 +81,6 @@ else:
         pickle.dump({"Initialized adBlock Directory": True, "adBlock_directory": adBlock_directory}, f)
 
 # ____________________________________________________________________________________________________________________________________
-# ublock_path = '/Users/Cory/Library/Application Support/Google/Chrome/Profile 4/Extensions/cjpalhdlnbpafiamejdnhcphjbkeiagm/1.49.2_0'
 
 # verify ssl certificate
 os.environ['SSL_CERT_FILE'] = certifi.where()
@@ -97,6 +98,8 @@ prefs = {
 options.add_experimental_option('prefs', prefs)
 options.add_argument(f'--load-extension={adBlock_directory}')
 driver = Chrome(options=options)
+
+# _____________________________________________________________________________________________________________________________________
 
 class MyHandler(FileSystemEventHandler):
     def __init__(self, main_dir):
