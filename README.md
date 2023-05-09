@@ -4,11 +4,11 @@ A simple Python script for Mac OSX for uploading images to Imgur using undetecte
 ## Requirements
 Python 3 (https://www.python.org/downloads/) 
 selenium  
-undetected-chromedriver  
+undetected-chromedriver (installs selenium if you don't have it)  
 watchdog  
-certifi
-Latest Version of Google Chrome
-At least one adblocker
+certifi  
+Latest Version of Google Chrome  
+At least one adblocker  
 
 ## Installation
 Clone or download this repository.
