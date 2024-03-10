@@ -104,11 +104,19 @@ driver = Chrome(options=options)
 class MyHandler(FileSystemEventHandler):
     def __init__(self, main_dir):
         self.main_dir = main_dir
-        self.last_check_time = datetime.datetime.now()
+        self.last_check_time = self.get_most_recent_file_time()
+
+    def get_most_recent_file_time(self):
+        files = [os.path.join(self.main_dir, f) for f in os.listdir(self.main_dir) if os.path.isfile(os.path.join(self.main_dir, f))]
+        if not files:
+            return datetime.datetime.now()
+        most_recent_file = max(files, key=os.path.getctime)
+        return datetime.datetime.fromtimestamp(os.path.getctime(most_recent_file))
 
     def on_created(self, event):
         if not event.is_directory and event.src_path.endswith('.jpg') and os.path.isfile(event.src_path):
             file_path = event.src_path
+            # file_path = clean_filename(file_path)
             file_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
             if file_time > self.last_check_time:
                 print(file_path)
@@ -120,6 +128,7 @@ class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if not event.is_directory and event.src_path.endswith('.jpg') and os.path.isfile(event.src_path):
             file_path = event.src_path
+            # file_path = clean_filename(file_path)
             file_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
             if file_time > self.last_check_time:
                 self.last_check_time = file_time  # update last check time
@@ -152,17 +161,15 @@ def go_to_imgur_upload(file_string):
             files[i] = file[1:]
     files = [file for file in files if not file.endswith('DS_Store')]
     files = [file for file in files if extract_timestamp(file) is not None]
-    # print(files)
     # Sort files in directory by creation time
     files.sort(key=extract_timestamp)
-
     # Get the filename of the most recently created file
     most_recent_file = files[-1]
 
 
     file_path = directory + "/" + most_recent_file
     # this is possibly redundant but believe it or not, I'm traumatized by the inundation of dots I have been experiencing while making this script
-    file_path = fix_dot_filename(file_path)
+    # file_path = fix_dot_filename(file_path)
     print(f'full path of screenshot: {file_path}')
     driver.get('https://imgur.com/upload')
     
@@ -178,7 +185,7 @@ def go_to_imgur_upload(file_string):
         "-e", 'keystroke "g" using {shift down, command down}',
         "-e", 'delay 1.5',
         "-e", f'keystroke "{file_path}" & return',
-        "-e", 'delay 1.5',
+        "-e", 'delay 2.6',
         "-e", 'keystroke return',
         "-e", 'end tell'
     ])
@@ -235,7 +242,7 @@ def get_directory():
 
 def extract_timestamp(filename):
     # Regular expression pattern to match the timestamp
-    pattern = r'\d{4}-\d{2}-\d{2} at \d{1,2}\.\d{2}\.\d{2} (AM|PM)'
+    pattern = r'\d{4}-\d{2}-\d{2} at \d{1,2}\.\d{2}\.\d{2}\u202f(AM|PM)'
     match = re.search(pattern, filename)
     if match:
         # Extract the date and time from the match
@@ -243,11 +250,13 @@ def extract_timestamp(filename):
         date_str, time_str = timestamp_str.split(' at ')
 
         # Convert the date and time strings into a datetime object
-        timestamp = time.strptime(timestamp_str, '%Y-%m-%d at %I.%M.%S %p')
+        timestamp = time.strptime(timestamp_str, '%Y-%m-%d at %I.%M.%S\u202f%p')
 
         return timestamp
     return None
 
+def clean_filename(filename):
+    return filename.replace('\u202f', '')
 
 def main():
     # Get the main directory to watch as a command line argument
