@@ -9,9 +9,10 @@ And for the web browser:
 Latest Version of Google Chrome, at least one adblocker (uBlock Origin is great!)
 
 ## Installation
-Clone or download this repository.
-Then install the required packages in terminal using homebrew:   
-`pip install watchdog undetected-chromedriver certifi`
+For your convenience, make a folder somewhere called AutoScreenShot.  
+Clone or download this repository to that folder.
+Then install the required packages in terminal:   
+`pip install certifi selenium undetected-chromedriver watchdog`
 
 ## Usage
 ### For First Time Use:
