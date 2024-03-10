@@ -25,17 +25,17 @@ After entering this file path, a selenium instance of chrome will open, and then
 After your enter your screenshot directory, you will see "started event handler" and you are good to go and ready for general use. 
 
 ### For General Use:
-If your directory is already entered the first time, then you will just see selenium's instance of Google Chrome open and the same "started event handler" message. 
-When a new screenshot is added to the specified directory, the script will automatically upload it to Imgur.com/upload. 
-Lastly, the direct link to the uploaded image will be copied to your clipboard, ready for your pasting needs.
+If your directory is already entered the first time, then you will just see selenium's instance of Google Chrome open and the "started event handler" message.  
+When a new screenshot is added to the specified directory, the script will automatically upload it to Imgur.com/upload. On macs, after the screenshot is taken, you have to drag the image to the right after it appears in the bottom right corner for it to be immediately available in the screenshot file directory. Or you can just wait a few seconds.  
+Lastly, the direct link to the uploaded image will be copied to your clipboard, ready for your pasting needs.  
 Last lastly, pressing "ctrl" + "c" is the only way to quit for now.
 
 ## Errors to be addressed:
-I checked for most exceptions, I'm sure I left a few out. Overall the function is robust, as I circumvented the slight imprecision of WatchDog library when detailing the exact creation time and date of a file. I basically sort the screenshots by their default string, which contains the date stamp given by Apple.
+I checked for most exceptions, I'm sure I left a few out. Overall the function is robust, as I circumvented the slight imprecision of using the WatchDog library when detailing the exact creation time and date of a file, especially since Apple is interfering with a quick way to access this data, most likely for security purposes. I basically sort the screenshots by their default string, which contains the date stamp given by Apple.
 
 Additionally the elements' css selectors on imgur could change overtime so I will make sure to update the css selectors as needed. I could use xpath too for the interaction with the web page but it usually didn't work for the more complex css items which are either activated by hovering only, or which appear intermittently depending on successful upload.
 
-Lastly, when left in an idle state for too long, there is a disconnect between the driver and the main thread. Will be working on this!
+I'd like to use some other method, possibly using the web driver, to upload a given screenshot. For now I am using osascript, and it works so I am cool with it at the moment.
 
 ### Note
 If you want to change the screenshot directory or the ad blocker directory which the app uses after you already entered it, simply delete the pickle file in the same directory as your script.  
