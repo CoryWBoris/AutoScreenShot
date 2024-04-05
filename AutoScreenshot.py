@@ -44,7 +44,7 @@ os.system('clear')
 # ___________________________________________________________________________________________________________________________________________________________
 
 # The proceding global snippet is the code which allows the user to input the directory for their adBlock plugin. 
-# You can use any ad blocker though, but uBlock is really really good.
+# You can use any ad blocker though, but uBlock is really really good. I explain how to find your adblock directory in the readme.
 
 # Check if pickle file contains string already for adblocker:
 if os.path.exists("directories.pickle"):
